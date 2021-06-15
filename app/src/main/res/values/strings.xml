@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">FreeMoviesX</string>
+    <string name="temperature_label">Температура</string>
+    <string name="feels_like_label">Ощущается как</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="search">search</string>
+    <string name="settings">Settings</string>
 </resources>
