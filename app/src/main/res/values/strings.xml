@@ -10,6 +10,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="textFilm">Описание: тут много описание про фильм который еще не скачен из интернета, но оно обязательно появится уже очень скоро!</string>
     <string name="loading">Загрузка</string>
-    <string name="triller">триллер</string>
+    <string name="triller">трейлер</string>
     <string name="_2_15">2.15</string>
+    <string name="error">ошибка</string>
+    <string name="reloading">переподключиться?</string>
 </resources>

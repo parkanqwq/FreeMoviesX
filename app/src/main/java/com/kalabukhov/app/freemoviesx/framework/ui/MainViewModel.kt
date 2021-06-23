@@ -12,11 +12,10 @@ class MainViewModel(private val repository: Repository) : ViewModel(), Lifecycle
 
     fun getMoviesFilm() = getDataFromMovieSource()
 
-
     private fun getDataFromMovieSource() {
         liveDataToObserve.value = AppState.Loading
         Thread {
-            sleep(1000)
+            sleep(oneSecond)
             liveDataToObserve.postValue(
                 AppState.Success(repository.getMovieFromLocalStorage()))
         }.start()
@@ -25,5 +24,9 @@ class MainViewModel(private val repository: Repository) : ViewModel(), Lifecycle
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     private fun onViewStart() {
         // тут запустится процев в онСтарт
+    }
+
+    companion object {
+        const val oneSecond: Long = 1000
     }
 }

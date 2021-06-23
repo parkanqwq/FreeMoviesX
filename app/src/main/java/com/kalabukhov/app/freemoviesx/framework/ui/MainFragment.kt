@@ -12,6 +12,9 @@ import com.kalabukhov.app.freemoviesx.adapter.AdapterMovies
 import com.kalabukhov.app.freemoviesx.databinding.MainFragmentBinding
 import com.kalabukhov.app.freemoviesx.model.AppState
 import com.kalabukhov.app.freemoviesx.model.entites.Movies
+import com.kalabukhov.app.freemoviesx.showSnackBar
+import com.kalabukhov.app.freemoviesx.showSnackBarLoading
+import kotlinx.android.synthetic.main.main_fragment.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
@@ -42,25 +45,34 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        with(binding) {
         initView(view)
-        binding.recyclerView.adapter = adapter
+        recyclerView.adapter = adapter
         viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
         viewModel.getMoviesFilm()
+        }
     }
 
     private fun renderData(appState: AppState) {
-        when (appState) {
-            is AppState.Success -> {
-                binding.loadingLayout.visibility = View.GONE
-                adapter.setWeather(appState.moviesData)
-            }
-            is AppState.Loading -> {
-                binding.loadingLayout.visibility = View.VISIBLE
-            }
-            is AppState.Error -> {
-                binding.loadingLayout.visibility = View.GONE
+        with(binding){
+            when (appState) {
+                is AppState.Success -> {
+                    loadingLayout.visibility = View.GONE
+                    adapter.setWeather(appState.moviesData)
+                }
+                is AppState.Loading -> {
+                    loadingLayout.visibility = View.VISIBLE
+                    mainFragment.showSnackBarLoading(getString(R.string.loading))
+                }
+                is AppState.Error -> {
+                    loadingLayout.visibility = View.GONE
+                    mainFragment.showSnackBar(
+                        getString(R.string.error),
+                        getString(R.string.reloading),
+                        { viewModel.getMoviesFilm() })
+                }
             }
         }
     }
@@ -95,7 +107,7 @@ class MainFragment : Fragment() {
     private fun navigateFragment(id: Int): Boolean {
         when (id) {
             R.id.action_settings -> {
-                Toast.makeText(context, "settings", Toast.LENGTH_SHORT).show()
+                main_fragment.showSnackBarLoading(getString(R.string.settings))
                 return true
             }
         }

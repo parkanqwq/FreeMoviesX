@@ -12,8 +12,7 @@ data class Movies(
 fun getDefaultCity1() = Movie("Super Men", 8.6, "5", R.drawable.forsazh,
     "1:15", 2015, "США")
 
-fun getRussianMovies(): List<Movies> {
-    return listOf(
+fun getRussianMovies() = listOf(
         Movies(Movie("Супер мен", 7.7, "3", R.drawable.suoermen,
             "1:46", 2015, "США")),
         Movies(Movie("Человек паук", 6.8, "359", R.drawable.spideman,
@@ -25,4 +24,3 @@ fun getRussianMovies(): List<Movies> {
         Movies(Movie("Форсаж", 8.6, "3559", R.drawable.forsazh,
             "1:55", 2018, "США"))
     )
-}

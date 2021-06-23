@@ -22,15 +22,16 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val movies = arguments?.getParcelable<Movies>(BUNDLE_EXTRA)
-        movies?.let {
-            it.nameMovie
-            binding.nameMovie.text = it.nameMovie.nameMovie
-            binding.starsMovie.text = CONST_STARS + it.nameMovie.starsMovie.toString()
-            binding.country.text = CONST_COUNTRY + it.nameMovie.country
-            binding.timeMovie.text = CONST_TIME_MOVIE + it.nameMovie.timeMovie
-            binding.age.text = CONST_AGE + it.nameMovie.age.toString()
-            binding.imageView.setImageResource(it.nameMovie.image)
+        arguments?.getParcelable<Movies>(BUNDLE_EXTRA)?.let {
+            with(binding){
+                it.nameMovie
+                nameMovie.text = it.nameMovie.nameMovie
+                starsMovie.text = CONST_STARS + it.nameMovie.starsMovie.toString()
+                country.text = CONST_COUNTRY + it.nameMovie.country
+                timeMovie.text = CONST_TIME_MOVIE + it.nameMovie.timeMovie
+                age.text = CONST_AGE + it.nameMovie.age.toString()
+                imageView.setImageResource(it.nameMovie.image)
+            }
         }
     }
 
