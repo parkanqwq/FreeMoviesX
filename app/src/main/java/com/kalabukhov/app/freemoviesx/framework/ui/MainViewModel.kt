@@ -5,19 +5,20 @@ import com.kalabukhov.app.freemoviesx.model.AppState
 import com.kalabukhov.app.freemoviesx.model.repository.Repository
 import java.lang.Thread.sleep
 
-class MainViewModel(private val repositoryImpl: Repository) : ViewModel(), LifecycleObserver {
+class MainViewModel(private val repository: Repository) : ViewModel(), LifecycleObserver {
     private val liveDataToObserve: MutableLiveData<AppState> = MutableLiveData()
 
     fun getLiveData() = liveDataToObserve
 
     fun getMoviesFilm() = getDataFromMovieSource()
 
+
     private fun getDataFromMovieSource() {
         liveDataToObserve.value = AppState.Loading
         Thread {
-            sleep(2000)
+            sleep(1000)
             liveDataToObserve.postValue(
-                AppState.Success(repositoryImpl.getMovieFromLocalStorage()))
+                AppState.Success(repository.getMovieFromLocalStorage()))
         }.start()
     }
 

@@ -3,26 +3,36 @@ package com.kalabukhov.app.freemoviesx.framework.ui
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.navigation.NavigationView
 import com.kalabukhov.app.freemoviesx.R
 import com.kalabukhov.app.freemoviesx.adapter.AdapterMovies
 import com.kalabukhov.app.freemoviesx.databinding.MainFragmentBinding
 import com.kalabukhov.app.freemoviesx.model.AppState
+import com.kalabukhov.app.freemoviesx.model.entites.Movies
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class MainFragment : Fragment() {
+
     private lateinit var binding: MainFragmentBinding
     private val viewModel: MainViewModel by viewModel()
+
+    private val onObjectListener = object : OnItemViewClickListener {
+        override fun onItemViewClick(movies: Movies) {
+            activity?.supportFragmentManager?.let {
+                val bundle = Bundle()
+                bundle.putParcelable(DetailsFragment.BUNDLE_EXTRA, movies)
+                it.beginTransaction()
+                    .add(R.id.container, DetailsFragment.newInstance(bundle))
+                    .addToBackStack("")
+                    .commitAllowingStateLoss()
+            }
+        }
+    }
+
+    private val adapter = AdapterMovies(onObjectListener)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,24 +42,39 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?){
         super.onViewCreated(view, savedInstanceState)
-        lifecycle.addObserver(viewModel)
         initView(view)
-        val observer = Observer<AppState> { renderData(it) }
-        viewModel.getLiveData().observe(viewLifecycleOwner, observer)
+        binding.recyclerView.adapter = adapter
+        viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
         viewModel.getMoviesFilm()
     }
 
-    private fun renderData(appState: AppState) = with(binding){
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = AdapterMovies(context, appState)
+    private fun renderData(appState: AppState) {
+        when (appState) {
+            is AppState.Success -> {
+                binding.loadingLayout.visibility = View.GONE
+                adapter.setWeather(appState.moviesData)
+            }
+            is AppState.Loading -> {
+                binding.loadingLayout.visibility = View.VISIBLE
+            }
+            is AppState.Error -> {
+                binding.loadingLayout.visibility = View.GONE
+            }
+        }
+    }
+
+    interface OnItemViewClickListener {
+        fun onItemViewClick(weather: Movies)
+    }
+
+    companion object {
+        fun newInstance() = MainFragment()
     }
 
     private fun initView(view: View) {
         val toolbar: Toolbar = initToolbar(view)
-       // initDrawer(view, toolbar)  почему то не работает, 7 часов потратил и не понял почему
-            // в активити если писать тоже саоме, работает, а тут нет(((
     }
 
     private fun initToolbar(view: View): Toolbar {
@@ -58,26 +83,6 @@ class MainFragment : Fragment() {
         appCompatActivity!!.setSupportActionBar(toolbar)
         setHasOptionsMenu(true)
         return toolbar
-    }
-
-     private fun initDrawer(view: View, toolbar: Toolbar) {
-         val drawerLayout: DrawerLayout = view.findViewById(R.id.drawer_layout)
-         val navView: NavigationView? = view.findViewById(R.id.nav_view)
-             // думаю проблема в  AppCompatActivity(), нужно писать что то другое... помогите
-         val toggle = ActionBarDrawerToggle(
-             AppCompatActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
-         )
-         drawerLayout.addDrawerListener(toggle)
-         toggle.syncState()
-
-         navView?.setNavigationItemSelectedListener { item: MenuItem ->
-            val id = item.itemId
-            if (navigateFragment(id)) {
-                drawerLayout.closeDrawer(GravityCompat.START)
-                return@setNavigationItemSelectedListener true
-            }
-            false
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -89,14 +94,6 @@ class MainFragment : Fragment() {
 
     private fun navigateFragment(id: Int): Boolean {
         when (id) {
-            R.id.action_addObj -> {
-                // меню для шторки но она не работает
-                return true
-            }
-            R.id.action_lookObj -> {
-                // меню для шторки но она не работает
-                return true
-            }
             R.id.action_settings -> {
                 Toast.makeText(context, "settings", Toast.LENGTH_SHORT).show()
                 return true
@@ -123,9 +120,4 @@ class MainFragment : Fragment() {
             }
         })
     }
-
-    companion object {
-        fun newInstance() = MainFragment()
-    }
 }
-

@@ -1,55 +1,55 @@
 package com.kalabukhov.app.freemoviesx.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.kalabukhov.app.freemoviesx.R
-import com.kalabukhov.app.freemoviesx.adapter.AdapterMovies.UserViewHolder
-import com.kalabukhov.app.freemoviesx.model.AppState
+import com.kalabukhov.app.freemoviesx.CONST_COUNTRY
+import com.kalabukhov.app.freemoviesx.CONST_STARS
+import com.kalabukhov.app.freemoviesx.databinding.ItemMoviesBinding
+import com.kalabukhov.app.freemoviesx.framework.ui.MainFragment
+import com.kalabukhov.app.freemoviesx.model.entites.Movies
 
-class AdapterMovies(private val mContext: Context?,private val appState: AppState) :
-    RecyclerView.Adapter<UserViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movies, parent, false)
-        return UserViewHolder(view)
+class AdapterMovies(private var onItemViewClickListener: MainFragment.OnItemViewClickListener?) :
+RecyclerView.Adapter<AdapterMovies.MainViewHolder>() {
+
+    private var movieData: List<Movies> = listOf()
+    private lateinit var binding: ItemMoviesBinding
+
+    fun setWeather(data: List<Movies>) {
+        movieData = data
+        notifyDataSetChanged()
     }
 
-    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        when (appState) {
-            is AppState.Success -> {
-                val moviesData = appState.moviesData
-                holder.loadingLayout.visibility = View.GONE
-                holder.nameMovie.text = moviesData.nameMovie.nameMovie
-                holder.starsMovie.text = moviesData.starsMovie.starsMovie.toString()
-            }
-            is AppState.Loading -> {
-                holder.loadingLayout.visibility = View.VISIBLE
-            }
-            is AppState.Error -> {
-                holder.loadingLayout.visibility = View.GONE
-                Toast.makeText(mContext, "Error", Toast.LENGTH_SHORT).show()
-            }
-        }
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): MainViewHolder {
+       binding = ItemMoviesBinding.inflate(
+           LayoutInflater.from(parent.context), parent, false
+       )
+        return MainViewHolder(binding.root)
+    }
+
+    override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
+        holder.bind(movieData[position])
     }
 
     override fun getItemCount(): Int {
-        return 10
+        return movieData.size
     }
 
-    class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var nameMovie: TextView
-        var starsMovie: TextView
-        var loadingLayout: FrameLayout
+    inner class MainViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        init {
-            nameMovie = itemView.findViewById(R.id.nameMovie)
-            starsMovie = itemView.findViewById(R.id.starsMovie)
-            loadingLayout = itemView.findViewById(R.id.loadingLayout)
+        fun bind(movie: Movies) = with(binding){
+            nameMovie.text = movie.nameMovie.nameMovie
+            starsMovie.text = CONST_STARS +  movie.nameMovie.starsMovie.toString()
+            country.text = CONST_COUNTRY + movie.nameMovie.country
+            timeMovie.text = movie.nameMovie.timeMovie
+            imageMovie.setImageResource(movie.nameMovie.image)
+            root.setOnClickListener {
+                onItemViewClickListener?.onItemViewClick(movie)
+            }
         }
     }
 }
