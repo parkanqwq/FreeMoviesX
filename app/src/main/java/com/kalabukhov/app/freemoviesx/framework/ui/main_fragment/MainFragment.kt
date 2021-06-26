@@ -1,15 +1,15 @@
-package com.kalabukhov.app.freemoviesx.framework.ui
+package com.kalabukhov.app.freemoviesx.framework.ui.main_fragment
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.kalabukhov.app.freemoviesx.R
-import com.kalabukhov.app.freemoviesx.adapter.AdapterMovies
+import com.kalabukhov.app.freemoviesx.framework.ui.adapter.AdapterMovies
 import com.kalabukhov.app.freemoviesx.databinding.MainFragmentBinding
+import com.kalabukhov.app.freemoviesx.framework.ui.DetailsFragment
 import com.kalabukhov.app.freemoviesx.model.AppState
 import com.kalabukhov.app.freemoviesx.model.entites.Movies
 import com.kalabukhov.app.freemoviesx.showSnackBar

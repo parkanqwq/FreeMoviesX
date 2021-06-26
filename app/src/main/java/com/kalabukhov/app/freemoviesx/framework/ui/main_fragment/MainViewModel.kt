@@ -1,4 +1,4 @@
-package com.kalabukhov.app.freemoviesx.framework.ui
+package com.kalabukhov.app.freemoviesx.framework.ui.main_fragment
 
 import androidx.lifecycle.*
 import com.kalabukhov.app.freemoviesx.model.AppState
