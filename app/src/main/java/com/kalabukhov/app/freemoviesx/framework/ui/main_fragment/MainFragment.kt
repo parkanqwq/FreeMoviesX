@@ -15,9 +15,11 @@ import com.kalabukhov.app.freemoviesx.model.entites.Movies
 import com.kalabukhov.app.freemoviesx.showSnackBar
 import com.kalabukhov.app.freemoviesx.showSnackBarLoading
 import kotlinx.android.synthetic.main.main_fragment.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), CoroutineScope by MainScope() {
 
     private lateinit var binding: MainFragmentBinding
     private val viewModel: MainViewModel by viewModel()

@@ -41,7 +41,7 @@ RecyclerView.Adapter<AdapterMovies.MainViewHolder>() {
 
         fun bind(movie: Movies) = with(binding){
             nameMovie.text = movie.nameMovie.name
-            starsMovie.text = CONST_STARS +  movie.nameMovie.starsMovie.toString()
+            starsMovie.text = CONST_STARS +  movie.nameMovie.vote_average.toString()
             country.text = CONST_COUNTRY + movie.nameMovie.original_language
             timeMovie.text = movie.nameMovie.runtime.toString()
             imageMovie.setImageResource(movie.nameMovie.image)

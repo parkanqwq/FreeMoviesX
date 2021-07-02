@@ -22,10 +22,7 @@ object MoviesLoader {
             try {
                 urlConnection = uri.openConnection() as HttpsURLConnection
                 urlConnection.requestMethod = "GET"
-//                    urlConnection.addRequestProperty(
-//                        "api_key",
-//                        "a7fe7b51456e94640008bbb9e3a50dd5"
-//                    )
+
                 urlConnection.readTimeout = 10000
                 val bufferedReader = BufferedReader(InputStreamReader(urlConnection.inputStream))
                 return Gson().fromJson(getLines(bufferedReader), MoviesDTO::class.java)

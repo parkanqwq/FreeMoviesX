@@ -1,20 +1,21 @@
 package com.kalabukhov.app.freemoviesx.framework.ui
 
-import android.widget.Toast
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kalabukhov.app.freemoviesx.model.AppState
 import com.kalabukhov.app.freemoviesx.model.repository.Repository
+import kotlinx.coroutines.*
 
-class DetailsViewModel(private val repository: Repository) : ViewModel(), LifecycleObserver {
+class DetailsViewModel(private val repository: Repository)
+    : ViewModel(), LifecycleObserver, CoroutineScope by MainScope() {
     val liveDataToObserver: MutableLiveData<AppState> = MutableLiveData()
 
     fun loadData(id: Int) {
         liveDataToObserver.value = AppState.Loading
-        Thread {
-            val data = repository.getMoviesFromServer(id)
-            liveDataToObserver.postValue(AppState.Success(listOf(data)))
-        }.start()
+        launch {
+            val job = async(Dispatchers.IO) { repository.getMoviesFromServer(id) }
+            liveDataToObserver.value = AppState.Success(listOf(job.await()))
+        }
     }
 }
