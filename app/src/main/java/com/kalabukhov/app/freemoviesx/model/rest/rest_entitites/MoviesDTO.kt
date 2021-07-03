@@ -1,4 +1,4 @@
-package com.kalabukhov.app.freemoviesx.model.rest_entitites
+package com.kalabukhov.app.freemoviesx.model.rest.rest_entitites
 
 data class MoviesDTO (
     val id: Int?,
@@ -7,5 +7,6 @@ data class MoviesDTO (
     val release_date: String?,
     val original_language: String?,
     val runtime: Int?,
-    val overview: String?
+    val overview: String?,
+    val backdrop_path: String?
     )

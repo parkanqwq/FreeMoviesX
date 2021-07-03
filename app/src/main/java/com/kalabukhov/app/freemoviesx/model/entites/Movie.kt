@@ -12,5 +12,6 @@ data class Movie(
     val original_language: String,
     val runtime: Int,
     val overview: String,
-    val image: Int
+    val image: Int,
+    val backdrop_path: String
 ) : Parcelable

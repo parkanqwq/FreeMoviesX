@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
 import com.kalabukhov.app.freemoviesx.framework.ui.*
-import com.kalabukhov.app.freemoviesx.model.rest_entitites.MoviesDTO
+import com.kalabukhov.app.freemoviesx.model.rest.rest_entitites.MoviesDTO
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.MalformedURLException
@@ -77,14 +77,15 @@ class DetailsService(name: String = "DetailService") : IntentService(name) {
                 fact.release_date,
                 fact.original_language,
                 fact.runtime,
-                fact.overview
+                fact.overview,
+                fact.backdrop_path
             )
         }
     }
 
     private fun onSuccessResponse(id: Int?, name: String?, vote_average: Double?,
                                   release_date: String?, original_language: String?,
-                                  runtime: Int?, overview: String?) {
+                                  runtime: Int?, overview: String?, backdrop_path: String?) {
         putLoadResult(DETAILS_RESPONSE_SUCCESS_EXTRA)
         broadcastIntent.putExtra(DETAILS_ID_EXTRA, id)
         broadcastIntent.putExtra(DETAILS_NAME_EXTRA, name)
@@ -94,6 +95,7 @@ class DetailsService(name: String = "DetailService") : IntentService(name) {
         broadcastIntent.putExtra(DETAILS_ORIGINAL_LANGUAGE_EXTRA, original_language)
         broadcastIntent.putExtra(DETAILS_RUNTIME_EXTRA, runtime)
         broadcastIntent.putExtra(DETAILS_OVERVIEW_EXTRA, overview)
+        broadcastIntent.putExtra(DETAILS_backdrop_path_EXTRA, backdrop_path)
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent)
     }
 

@@ -2,6 +2,7 @@ package com.kalabukhov.app.freemoviesx.framework.ui.main_fragment
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -12,12 +13,16 @@ import com.kalabukhov.app.freemoviesx.databinding.MainFragmentBinding
 import com.kalabukhov.app.freemoviesx.framework.ui.DetailsFragment
 import com.kalabukhov.app.freemoviesx.model.AppState
 import com.kalabukhov.app.freemoviesx.model.entites.Movies
+import com.kalabukhov.app.freemoviesx.model.rest.MoviesRepo
+import com.kalabukhov.app.freemoviesx.model.rest.rest_entitites.ApiUtils
 import com.kalabukhov.app.freemoviesx.showSnackBar
 import com.kalabukhov.app.freemoviesx.showSnackBarLoading
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainFragment : Fragment(), CoroutineScope by MainScope() {
 

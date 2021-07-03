@@ -5,19 +5,30 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.google.gson.Gson
 import com.kalabukhov.app.freemoviesx.*
 import com.kalabukhov.app.freemoviesx.databinding.FragmentDetailsBinding
+import com.kalabukhov.app.freemoviesx.model.AppState
 import com.kalabukhov.app.freemoviesx.model.entites.Movies
-import com.kalabukhov.app.freemoviesx.model.rest_entitites.MoviesDTO
+import com.kalabukhov.app.freemoviesx.model.rest.MoviesRepo
+import com.kalabukhov.app.freemoviesx.model.rest.rest_entitites.MoviesDTO
 import com.kalabukhov.app.freemoviesx.services.DetailsService
 import com.kalabukhov.app.freemoviesx.services.LATITUDE_EXTRA
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_details.view.*
+import okhttp3.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.IOException
 
 const val DETAILS_INTENT_FILTER = "DETAILS INTENT FILTER"
 const val DETAILS_LOAD_RESULT_EXTRA = "LOAD RESULT"
@@ -35,6 +46,7 @@ const val DETAILS_RELEASE_DATE_EXTRA = "RELEASE_DATE"
 const val DETAILS_ORIGINAL_LANGUAGE_EXTRA = "ORIGINAL_LANGUAGE"
 const val DETAILS_RUNTIME_EXTRA = "RUNTIME"
 const val DETAILS_OVERVIEW_EXTRA = "OVERVIEW"
+const val DETAILS_backdrop_path_EXTRA = "backdrop_path"
 
 private const val PROCESS_ERROR = "Обработка ошибки"
 
@@ -60,7 +72,8 @@ class DetailsFragment : Fragment() {
                         intent.getStringExtra(DETAILS_RELEASE_DATE_EXTRA),
                         intent.getStringExtra(DETAILS_ORIGINAL_LANGUAGE_EXTRA),
                         intent.getIntExtra(DETAILS_RUNTIME_EXTRA, 9),
-                        intent.getStringExtra(DETAILS_OVERVIEW_EXTRA)
+                        intent.getStringExtra(DETAILS_OVERVIEW_EXTRA),
+                        intent.getStringExtra(DETAILS_backdrop_path_EXTRA)
                     )
                 )
                 else -> error(PROCESS_ERROR)
@@ -124,9 +137,13 @@ class DetailsFragment : Fragment() {
                 country.text = CONST_COUNTRY +  us
                 timeMovie.text = CONST_TIME_MOVIE +  movie.runtime.toString()
                 tagline.text = movie.overview
-                arguments?.getParcelable<Movies>(BUNDLE_EXTRA).let {
-                    imageView.setImageResource(it!!.nameMovie.image)
-                }
+                Picasso
+                    .get()
+                    .load("https://image.tmdb.org/t/p/original"+movie.backdrop_path)
+                    .into(imageView)
+//                arguments?.getParcelable<Movies>(BUNDLE_EXTRA).let {
+//                    imageView.setImageResource(it!!.nameMovie.image)
+//                }
             }
         }
     }
@@ -145,7 +162,39 @@ class DetailsFragment : Fragment() {
         arguments?.getParcelable<Movies>(BUNDLE_EXTRA).let {
            idForRequestInternet = it?.nameMovie?.id!!
         }
-        getMovies()
+
+        MoviesRepo.api.getMoviesAsync(idForRequestInternet!!, "a7fe7b51456e94640008bbb9e3a50dd5", "ru")
+            .enqueue(object : Callback<MoviesDTO>{
+                override fun onResponse(call: Call<MoviesDTO>, response: Response<MoviesDTO>) {
+                    if (response.isSuccessful) {
+                        val movies = response.body()
+                        with(binding) {
+                            loadingLayout.visibility = View.GONE
+                            nameMovie.text = movies?.original_title.toString()
+                            starsMovie.text = CONST_STARS + movies?.vote_average.toString()
+                            age.text = CONST_AGE + movies?.release_date.toString()
+                            var us: String? = movies?.original_language.toString()
+                            if (us.equals("en")){
+                                us = "США"
+                            }
+                            country.text = CONST_COUNTRY + us
+                            timeMovie.text = CONST_TIME_MOVIE + movies?.runtime.toString()
+                            tagline.text = movies?.overview.toString()
+                            Picasso
+                                .get()
+                                .load("https://image.tmdb.org/t/p/original"+movies?.backdrop_path)
+                                .into(imageView)
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<MoviesDTO>, t: Throwable) {
+                    // тут если ошибка на нашой стороне
+                }
+            })
+        // getMovies()
+
+
 //        val movies = arguments?.getParcelable<Movies>(BUNDLE_EXTRA)
 //            movies?.let {
 //                with(binding) {
@@ -174,7 +223,10 @@ class DetailsFragment : Fragment() {
 //                                country.text = CONST_COUNTRY + us
 //                                timeMovie.text = CONST_TIME_MOVIE + appState.moviesData[0].runtime.toString()
 //                                tagline.text = appState.moviesData[0].overview.toString()
-//                                imageView.setImageResource(movies.nameMovie.image)
+//                                Picasso
+//                                    .get()
+//                                    .load("https://image.tmdb.org/t/p/original"+appState.moviesData[0].backdrop_path)
+//                                    .into(imageView)
 //                            }
 //                        }
 //                    })
