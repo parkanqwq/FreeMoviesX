@@ -163,76 +163,78 @@ class DetailsFragment : Fragment() {
            idForRequestInternet = it?.nameMovie?.id!!
         }
 
-        MoviesRepo.api.getMoviesAsync(idForRequestInternet!!, "a7fe7b51456e94640008bbb9e3a50dd5", "ru")
-            .enqueue(object : Callback<MoviesDTO>{
-                override fun onResponse(call: Call<MoviesDTO>, response: Response<MoviesDTO>) {
-                    if (response.isSuccessful) {
-                        val movies = response.body()
-                        with(binding) {
-                            loadingLayout.visibility = View.GONE
-                            nameMovie.text = movies?.original_title.toString()
-                            starsMovie.text = CONST_STARS + movies?.vote_average.toString()
-                            age.text = CONST_AGE + movies?.release_date.toString()
-                            var us: String? = movies?.original_language.toString()
-                            if (us.equals("en")){
-                                us = "США"
-                            }
-                            country.text = CONST_COUNTRY + us
-                            timeMovie.text = CONST_TIME_MOVIE + movies?.runtime.toString()
-                            tagline.text = movies?.overview.toString()
-                            Picasso
-                                .get()
-                                .load("https://image.tmdb.org/t/p/original"+movies?.backdrop_path)
-                                .into(imageView)
-                        }
-                    }
-                }
+//        MoviesRepo.api.getMoviesAsync(idForRequestInternet!!, "a7fe7b51456e94640008bbb9e3a50dd5", "ru")
+//            .enqueue(object : Callback<MoviesDTO>{
+//                override fun onResponse(call: Call<MoviesDTO>, response: Response<MoviesDTO>) {
+//                    if (response.isSuccessful) {
+//                        val movies = response.body()
+//                        with(binding) {
+//                            loadingLayout.visibility = View.GONE
+//                            nameMovie.text = movies?.original_title.toString()
+//                            starsMovie.text = CONST_STARS + movies?.vote_average.toString()
+//                            age.text = CONST_AGE + movies?.release_date.toString()
+//                            var us: String? = movies?.original_language.toString()
+//                            if (us.equals("en")){
+//                                us = "США"
+//                            }
+//                            country.text = CONST_COUNTRY + us
+//                            timeMovie.text = CONST_TIME_MOVIE + movies?.runtime.toString()
+//                            tagline.text = movies?.overview.toString()
+//                            Picasso
+//                                .get()
+//                                .load("https://image.tmdb.org/t/p/original"+movies?.backdrop_path)
+//                                .into(imageView)
+//                        }
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<MoviesDTO>, t: Throwable) {
+//                    // тут если ошибка на нашой стороне
+//                }
+//            })
 
-                override fun onFailure(call: Call<MoviesDTO>, t: Throwable) {
-                    // тут если ошибка на нашой стороне
-                }
-            })
+
         // getMovies()
 
 
-//        val movies = arguments?.getParcelable<Movies>(BUNDLE_EXTRA)
-//            movies?.let {
-//                with(binding) {
-//                    nameMovie.text = it.nameMovie.name
-//
-//                    viewModel.liveDataToObserver.observe(viewLifecycleOwner, { appState ->
-//                        when (appState) {
-//                            is AppState.Error -> {
-//                                loadingLayout.visibility = View.GONE
-//                                loadingLayout.visibility = View.GONE
-//                                detalsFragment.showSnackBar(
-//                                    getString(R.string.error),
-//                                    getString(R.string.reloading),
-//                                    { viewModel.loadData(it.nameMovie.id) })
-//                            }
-//                            is AppState.Loading -> loadingLayout.visibility = View.VISIBLE
-//                            is AppState.Success -> {
-//                                loadingLayout.visibility = View.GONE
-//                                nameMovie.text = appState.moviesData[0].original_title.toString()
-//                                starsMovie.text = CONST_STARS + appState.moviesData[0].vote_average.toString()
-//                                age.text = CONST_AGE + appState.moviesData[0].release_date.toString()
-//                                var us: String? = appState.moviesData[0].original_language.toString()
-//                                if (us.equals("en")){
-//                                    us = "США"
-//                                }
-//                                country.text = CONST_COUNTRY + us
-//                                timeMovie.text = CONST_TIME_MOVIE + appState.moviesData[0].runtime.toString()
-//                                tagline.text = appState.moviesData[0].overview.toString()
-//                                Picasso
-//                                    .get()
-//                                    .load("https://image.tmdb.org/t/p/original"+appState.moviesData[0].backdrop_path)
-//                                    .into(imageView)
-//                            }
-//                        }
-//                    })
-//                    viewModel.loadData(it.nameMovie.id)
-//                }
-//        }
+        val movies = arguments?.getParcelable<Movies>(BUNDLE_EXTRA)
+            movies?.let {
+                with(binding) {
+                    nameMovie.text = it.nameMovie.name
+
+                    viewModel.liveDataToObserver.observe(viewLifecycleOwner, { appState ->
+                        when (appState) {
+                            is AppState.Error -> {
+                                loadingLayout.visibility = View.GONE
+                                loadingLayout.visibility = View.GONE
+                                detalsFragment.showSnackBar(
+                                    getString(R.string.error),
+                                    getString(R.string.reloading),
+                                    { viewModel.loadData(it.nameMovie.id) })
+                            }
+                            is AppState.Loading -> loadingLayout.visibility = View.VISIBLE
+                            is AppState.Success -> {
+                                loadingLayout.visibility = View.GONE
+                                nameMovie.text = appState.moviesData[0].original_title.toString()
+                                starsMovie.text = CONST_STARS + appState.moviesData[0].vote_average.toString()
+                                age.text = CONST_AGE + appState.moviesData[0].release_date.toString()
+                                var us: String? = appState.moviesData[0].original_language.toString()
+                                if (us.equals("en")){
+                                    us = "США"
+                                }
+                                country.text = CONST_COUNTRY + us
+                                timeMovie.text = CONST_TIME_MOVIE + appState.moviesData[0].runtime.toString()
+                                tagline.text = appState.moviesData[0].overview.toString()
+                                Picasso
+                                    .get()
+                                    .load("https://image.tmdb.org/t/p/original"+appState.moviesData[0].backdrop_path)
+                                    .into(imageView)
+                            }
+                        }
+                    })
+                    viewModel.loadData(it.nameMovie.id)
+                }
+        }
     }
 
     companion object {
