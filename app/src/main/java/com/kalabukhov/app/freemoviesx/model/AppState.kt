@@ -1,5 +1,6 @@
 package com.kalabukhov.app.freemoviesx.model
 
+import com.kalabukhov.app.freemoviesx.model.entites.Movie
 import com.kalabukhov.app.freemoviesx.model.entites.Movies
 
 sealed class AppState {

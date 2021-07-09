@@ -2,9 +2,9 @@ package com.kalabukhov.app.freemoviesx.framework.ui.main_fragment
 
 import androidx.lifecycle.*
 import com.kalabukhov.app.freemoviesx.model.AppState
+import com.kalabukhov.app.freemoviesx.model.repository.ADULT
 import com.kalabukhov.app.freemoviesx.model.repository.Repository
 import kotlinx.coroutines.*
-import java.lang.Thread.sleep
 
 class MainViewModel(private val repository: Repository)
     : ViewModel(), LifecycleObserver, CoroutineScope by MainScope() {
@@ -17,7 +17,6 @@ class MainViewModel(private val repository: Repository)
     private fun getDataFromMovieSource() {
         liveDataToObserve.value = AppState.Loading
         launch {
-            delay(oneSecond)
             val localStorageJob = async(Dispatchers.IO) {
                 repository.getMovieFromLocalStorage()
             }
@@ -28,9 +27,5 @@ class MainViewModel(private val repository: Repository)
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     private fun onViewStart() {
         // тут запустится процев в онСтарт
-    }
-
-    companion object {
-        const val oneSecond: Long = 1000
     }
 }

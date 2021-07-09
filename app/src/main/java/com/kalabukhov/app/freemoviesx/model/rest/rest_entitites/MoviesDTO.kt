@@ -8,5 +8,6 @@ data class MoviesDTO (
     val original_language: String?,
     val runtime: Int?,
     val overview: String?,
-    val backdrop_path: String?
+    val backdrop_path: String?,
+    val adult: Boolean?
     )

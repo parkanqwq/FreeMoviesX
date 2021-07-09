@@ -1,6 +1,7 @@
 package com.kalabukhov.app.freemoviesx.model.rest
 
 import com.kalabukhov.app.freemoviesx.model.rest.rest_entitites.MoviesDTO
+import com.kalabukhov.app.freemoviesx.model.rest.rest_entitites.MoviesDTOArr
 import retrofit2.http.Query
 import retrofit2.Call
 import retrofit2.Response
@@ -15,4 +16,13 @@ interface MoviesAPI {
         @Query("api_key") api_key: String,
         @Query("language") language: String,
     ) : Call<MoviesDTO>
+
+    @GET("3/search/movie")
+    fun getNextPage(
+        @Query("api_key") apiKey: String,
+        //@Query("language") language: String,
+        @Query("page") page: Int,
+        @Query("include_adult") include_adult: Boolean,
+        @Query("query") query: String
+    ): Call<MoviesDTOArr>
 }

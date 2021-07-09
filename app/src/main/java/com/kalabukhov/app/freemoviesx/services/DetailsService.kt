@@ -4,7 +4,7 @@ import android.app.IntentService
 import android.content.Intent
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.gson.Gson
-import com.kalabukhov.app.freemoviesx.framework.ui.*
+import com.kalabukhov.app.freemoviesx.framework.ui.details_fragment.*
 import com.kalabukhov.app.freemoviesx.model.rest.rest_entitites.MoviesDTO
 import java.io.BufferedReader
 import java.io.InputStreamReader

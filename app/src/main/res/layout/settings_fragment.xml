@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/detals_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".framework.ui.settings_fragment.SettingsFragment">
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_8_dp"
+        android:text="@string/settings"
+        android:textAlignment="center"
+        android:textColor="@color/purple_500"
+        android:textSize="@dimen/feels_like_text_size" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switchAdult"
+        android:layout_margin="@dimen/margin_8_dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/adult"
+        android:textOff="@string/off"
+        android:textOn="@string/on"
+        app:showText="true"/>
+
+</LinearLayout>

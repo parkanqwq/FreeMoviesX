@@ -1,34 +1,26 @@
-package com.kalabukhov.app.freemoviesx.framework.ui
+package com.kalabukhov.app.freemoviesx.framework.ui.details_fragment
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.os.Bundle
-import android.os.Handler
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.google.gson.Gson
 import com.kalabukhov.app.freemoviesx.*
 import com.kalabukhov.app.freemoviesx.databinding.FragmentDetailsBinding
 import com.kalabukhov.app.freemoviesx.model.AppState
 import com.kalabukhov.app.freemoviesx.model.entites.Movies
-import com.kalabukhov.app.freemoviesx.model.rest.MoviesRepo
 import com.kalabukhov.app.freemoviesx.model.rest.rest_entitites.MoviesDTO
 import com.kalabukhov.app.freemoviesx.services.DetailsService
 import com.kalabukhov.app.freemoviesx.services.LATITUDE_EXTRA
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_details.*
 import kotlinx.android.synthetic.main.fragment_details.view.*
-import okhttp3.*
+import kotlinx.android.synthetic.main.item_movies.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.IOException
 
 const val DETAILS_INTENT_FILTER = "DETAILS INTENT FILTER"
 const val DETAILS_LOAD_RESULT_EXTRA = "LOAD RESULT"
@@ -47,7 +39,6 @@ const val DETAILS_ORIGINAL_LANGUAGE_EXTRA = "ORIGINAL_LANGUAGE"
 const val DETAILS_RUNTIME_EXTRA = "RUNTIME"
 const val DETAILS_OVERVIEW_EXTRA = "OVERVIEW"
 const val DETAILS_backdrop_path_EXTRA = "backdrop_path"
-
 private const val PROCESS_ERROR = "Обработка ошибки"
 
 class DetailsFragment : Fragment() {
@@ -57,27 +48,27 @@ class DetailsFragment : Fragment() {
 
     private val loadResultsReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            when (intent.getStringExtra(DETAILS_LOAD_RESULT_EXTRA)) {
-                DETAILS_INTENT_EMPTY_EXTRA -> error(DETAILS_INTENT_EMPTY_EXTRA)
-                DETAILS_DATA_EMPTY_EXTRA -> error(DETAILS_DATA_EMPTY_EXTRA)
-                DETAILS_RESPONSE_EMPTY_EXTRA -> error(DETAILS_RESPONSE_EMPTY_EXTRA)
-                DETAILS_REQUEST_ERROR_EXTRA -> error(DETAILS_REQUEST_ERROR_EXTRA)
-                DETAILS_REQUEST_ERROR_MESSAGE_EXTRA -> error(DETAILS_REQUEST_ERROR_MESSAGE_EXTRA)
-                DETAILS_URL_MALFORMED_EXTRA -> error(DETAILS_URL_MALFORMED_EXTRA)
-                DETAILS_RESPONSE_SUCCESS_EXTRA -> renderData(
-                    MoviesDTO(
-                        intent.getIntExtra(DETAILS_ID_EXTRA, 580),
-                        intent.getStringExtra(DETAILS_NAME_EXTRA),
-                        intent.getDoubleExtra(DETAILS_VOTE_AVERAGE_EXTRA, 5.9),
-                        intent.getStringExtra(DETAILS_RELEASE_DATE_EXTRA),
-                        intent.getStringExtra(DETAILS_ORIGINAL_LANGUAGE_EXTRA),
-                        intent.getIntExtra(DETAILS_RUNTIME_EXTRA, 9),
-                        intent.getStringExtra(DETAILS_OVERVIEW_EXTRA),
-                        intent.getStringExtra(DETAILS_backdrop_path_EXTRA)
-                    )
-                )
-                else -> error(PROCESS_ERROR)
-            }
+//            when (intent.getStringExtra(DETAILS_LOAD_RESULT_EXTRA)) {
+//                DETAILS_INTENT_EMPTY_EXTRA -> error(DETAILS_INTENT_EMPTY_EXTRA)
+//                DETAILS_DATA_EMPTY_EXTRA -> error(DETAILS_DATA_EMPTY_EXTRA)
+//                DETAILS_RESPONSE_EMPTY_EXTRA -> error(DETAILS_RESPONSE_EMPTY_EXTRA)
+//                DETAILS_REQUEST_ERROR_EXTRA -> error(DETAILS_REQUEST_ERROR_EXTRA)
+//                DETAILS_REQUEST_ERROR_MESSAGE_EXTRA -> error(DETAILS_REQUEST_ERROR_MESSAGE_EXTRA)
+//                DETAILS_URL_MALFORMED_EXTRA -> error(DETAILS_URL_MALFORMED_EXTRA)
+//                DETAILS_RESPONSE_SUCCESS_EXTRA -> renderData(
+//                    MoviesDTO(
+//                        intent.getIntExtra(DETAILS_ID_EXTRA, 580),
+//                        intent.getStringExtra(DETAILS_NAME_EXTRA),
+//                        intent.getDoubleExtra(DETAILS_VOTE_AVERAGE_EXTRA, 5.9),
+//                        intent.getStringExtra(DETAILS_RELEASE_DATE_EXTRA),
+//                        intent.getStringExtra(DETAILS_ORIGINAL_LANGUAGE_EXTRA),
+//                        intent.getIntExtra(DETAILS_RUNTIME_EXTRA, 9),
+//                        intent.getStringExtra(DETAILS_OVERVIEW_EXTRA),
+//                        intent.getStringExtra(DETAILS_backdrop_path_EXTRA)
+//                    )
+//                )
+//                else -> error(PROCESS_ERROR)
+//            }
         }
     }
 
@@ -200,7 +191,7 @@ class DetailsFragment : Fragment() {
         val movies = arguments?.getParcelable<Movies>(BUNDLE_EXTRA)
             movies?.let {
                 with(binding) {
-                    nameMovie.text = it.nameMovie.name
+                    nameMovie.text = it.nameMovie.original_title
 
                     viewModel.liveDataToObserver.observe(viewLifecycleOwner, { appState ->
                         when (appState) {
@@ -210,7 +201,7 @@ class DetailsFragment : Fragment() {
                                 detalsFragment.showSnackBar(
                                     getString(R.string.error),
                                     getString(R.string.reloading),
-                                    { viewModel.loadData(it.nameMovie.id) })
+                                    { viewModel.loadData(movies) })
                             }
                             is AppState.Loading -> loadingLayout.visibility = View.VISIBLE
                             is AppState.Success -> {
@@ -229,10 +220,23 @@ class DetailsFragment : Fragment() {
                                     .get()
                                     .load("https://image.tmdb.org/t/p/original"+appState.moviesData[0].backdrop_path)
                                     .into(imageView)
+                                adultMovie.text = appState.moviesData[0].adult.toString()
                             }
                         }
                     })
-                    viewModel.loadData(it.nameMovie.id)
+                    viewModel.loadData(movies)
+                    btnLike.setOnClickListener {
+                        val editText = EditText(context)
+                        val dialogClab = android.app.AlertDialog.Builder(context)
+                            .setTitle("Заметка")
+                            .setNeutralButton("Отмена")
+                            { dialogFinish: DialogInterface?, which: Int -> }
+                            .setView(editText)
+                            .setPositiveButton("Добавить") { dialogFinish: DialogInterface?, which: Int ->
+                                viewModel.createNote(movies, editText.text.toString())
+                            }
+                        dialogClab.show()
+                    }
                 }
         }
     }

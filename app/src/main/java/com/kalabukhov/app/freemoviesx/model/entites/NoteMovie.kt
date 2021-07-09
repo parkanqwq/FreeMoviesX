@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Movie(
+data class NoteMovie (
     val id: Int,
     val original_title: String,
     val vote_average: Double,
@@ -13,6 +13,6 @@ data class Movie(
     val runtime: Int,
     val overview: String,
     val backdrop_path: String,
-    val adult: Boolean = false,
-    var note: String
+    val adult: Boolean,
+    val note: String
 ) : Parcelable

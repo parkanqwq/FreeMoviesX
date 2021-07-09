@@ -16,4 +16,16 @@
         android:title="@string/settings"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
          />
+    <item
+        android:id="@+id/action_history"
+        android:orderInCategory="5"
+        android:title="@string/history"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        />
+    <item
+        android:id="@+id/action_like"
+        android:orderInCategory="5"
+        android:title="@string/like"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        />
 </menu>

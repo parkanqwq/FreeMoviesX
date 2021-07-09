@@ -1,8 +1,11 @@
 package com.kalabukhov.app.freemoviesx.framework.ui.main_fragment
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.media.audiofx.BassBoost
 import android.os.Bundle
+import android.provider.Settings
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -10,19 +13,21 @@ import androidx.fragment.app.Fragment
 import com.kalabukhov.app.freemoviesx.R
 import com.kalabukhov.app.freemoviesx.framework.ui.adapter.AdapterMovies
 import com.kalabukhov.app.freemoviesx.databinding.MainFragmentBinding
-import com.kalabukhov.app.freemoviesx.framework.ui.DetailsFragment
+import com.kalabukhov.app.freemoviesx.framework.ui.details_fragment.DetailsFragment
+import com.kalabukhov.app.freemoviesx.framework.ui.details_fragment.DetailsFragment.Companion.BUNDLE_EXTRA
+import com.kalabukhov.app.freemoviesx.framework.ui.history_fragment.HistoryFragment
+import com.kalabukhov.app.freemoviesx.framework.ui.note_fragment.NoteFragment
+import com.kalabukhov.app.freemoviesx.framework.ui.settings_fragment.SettingsFragment
 import com.kalabukhov.app.freemoviesx.model.AppState
 import com.kalabukhov.app.freemoviesx.model.entites.Movies
-import com.kalabukhov.app.freemoviesx.model.rest.MoviesRepo
-import com.kalabukhov.app.freemoviesx.model.rest.rest_entitites.ApiUtils
+import com.kalabukhov.app.freemoviesx.model.repository.ADULT
+import com.kalabukhov.app.freemoviesx.model.repository.QUERY
 import com.kalabukhov.app.freemoviesx.showSnackBar
 import com.kalabukhov.app.freemoviesx.showSnackBarLoading
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class MainFragment : Fragment(), CoroutineScope by MainScope() {
 
@@ -56,6 +61,10 @@ class MainFragment : Fragment(), CoroutineScope by MainScope() {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
         initView(view)
+        ADULT = activity
+            ?.getPreferences(Context.MODE_PRIVATE)
+            ?.getBoolean(SettingsFragment.dataKeyAdult, false)
+            ?: false
         recyclerView.adapter = adapter
         viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
         viewModel.getMoviesFilm()
@@ -67,7 +76,7 @@ class MainFragment : Fragment(), CoroutineScope by MainScope() {
             when (appState) {
                 is AppState.Success -> {
                     loadingLayout.visibility = View.GONE
-                    adapter.setWeather(appState.moviesData)
+                    adapter.setMovies(appState.moviesData)
                 }
                 is AppState.Loading -> {
                     loadingLayout.visibility = View.VISIBLE
@@ -114,7 +123,34 @@ class MainFragment : Fragment(), CoroutineScope by MainScope() {
     private fun navigateFragment(id: Int): Boolean {
         when (id) {
             R.id.action_settings -> {
-                main_fragment.showSnackBarLoading(getString(R.string.settings))
+                activity?.supportFragmentManager?.let {
+                    val bundle = Bundle()
+                    bundle.putParcelable(SettingsFragment.BUNDLE_EXTRA_SETTINGS, null)
+                    it.beginTransaction()
+                        .add(R.id.container, SettingsFragment.newInstance(bundle))
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                }
+                return true
+            }
+            R.id.action_history -> {
+                activity?.supportFragmentManager?.let {
+//                    val bundle = Bundle()
+//                    bundle.putParcelable(HistoryFragment.BUNDLE_EXTRA_HISTORY, null)
+                    it.beginTransaction()
+                        .add(R.id.container, HistoryFragment.newInstance())
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                }
+                return true
+            }
+            R.id.action_like -> {
+                activity?.supportFragmentManager?.let {
+                    it.beginTransaction()
+                        .add(R.id.container, NoteFragment.newInstance())
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                }
                 return true
             }
         }
@@ -126,10 +162,15 @@ class MainFragment : Fragment(), CoroutineScope by MainScope() {
         inflater.inflate(R.menu.main, menu)
         val search = menu.findItem(R.id.action_search)
         val settings = menu.findItem(R.id.action_settings)
+        val history = menu.findItem(R.id.action_history)
+        val actionLike = menu.findItem(R.id.action_like)
 
         val searchText = search.actionView as SearchView
         searchText.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
+                QUERY = query
+                viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
+                viewModel.getMoviesFilm()
                 return true
             }
 
