@@ -19,4 +19,6 @@
     <string name="on">on</string>
     <string name="history">История</string>
     <string name="like">нравится</string>
+    <string name="content_provider">Контакты</string>
+    <string name="authorities">geekbrains.provider</string>
 </resources>

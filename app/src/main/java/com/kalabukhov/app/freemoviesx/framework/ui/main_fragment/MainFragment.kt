@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import com.kalabukhov.app.freemoviesx.R
 import com.kalabukhov.app.freemoviesx.framework.ui.adapter.AdapterMovies
 import com.kalabukhov.app.freemoviesx.databinding.MainFragmentBinding
+import com.kalabukhov.app.freemoviesx.framework.ui.contact_fragment.ContentProviderFragment
 import com.kalabukhov.app.freemoviesx.framework.ui.details_fragment.DetailsFragment
 import com.kalabukhov.app.freemoviesx.framework.ui.details_fragment.DetailsFragment.Companion.BUNDLE_EXTRA
 import com.kalabukhov.app.freemoviesx.framework.ui.history_fragment.HistoryFragment
@@ -148,6 +149,15 @@ class MainFragment : Fragment(), CoroutineScope by MainScope() {
                 activity?.supportFragmentManager?.let {
                     it.beginTransaction()
                         .add(R.id.container, NoteFragment.newInstance())
+                        .addToBackStack("")
+                        .commitAllowingStateLoss()
+                }
+                return true
+            }
+            R.id.menu_content_provider -> {
+                activity?.supportFragmentManager?.let {
+                    it.beginTransaction()
+                        .add(R.id.container, ContentProviderFragment.newInstance())
                         .addToBackStack("")
                         .commitAllowingStateLoss()
                 }

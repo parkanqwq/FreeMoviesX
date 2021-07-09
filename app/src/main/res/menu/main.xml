@@ -28,4 +28,8 @@
         android:title="@string/like"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         />
+    <item
+        android:id="@+id/menu_content_provider"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="@string/content_provider" />
 </menu>
