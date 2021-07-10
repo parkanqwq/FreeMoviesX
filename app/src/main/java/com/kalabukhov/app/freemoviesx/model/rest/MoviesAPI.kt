@@ -26,10 +26,4 @@ interface MoviesAPI {
         @Query("include_adult") include_adult: Boolean,
         @Query("query") query: String
     ): Call<MoviesDTOArr>
-
-    @GET("3/person")
-    fun getPerson(
-        @Query("id") id: Int,
-        @Query("api_key") apiKey: String
-    ): Call<PersoneMovie>
 }

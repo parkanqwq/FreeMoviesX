@@ -56,13 +56,12 @@ RecyclerView.Adapter<AdapterMovies.MainViewHolder>() {
     inner class MainViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemMoviesBinding.bind(view)
         fun bind(movie: Movies) = with(binding){
-            nameMovie.text = movie.name
-            starsMovie.text = movie.place_of_birth
-//            starsMovie.text = CONST_STARS +  movie.nameMovie.vote_average.toString()
-//            country.text = CONST_COUNTRY + movie.nameMovie.original_language
+            nameMovie.text = movie.nameMovie.original_title
+            starsMovie.text = CONST_STARS +  movie.nameMovie.vote_average.toString()
+            country.text = CONST_COUNTRY + movie.nameMovie.original_language
             Picasso
                 .get()
-                .load("https://image.tmdb.org/t/p/original"+movie.poster_path)
+                .load("https://image.tmdb.org/t/p/original"+movie.nameMovie.backdrop_path)
                 .into(imageMovie)
             root.setOnClickListener {
                 onItemViewClickListener?.onItemViewClick(movie)

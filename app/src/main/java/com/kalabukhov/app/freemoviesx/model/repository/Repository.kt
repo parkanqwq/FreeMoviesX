@@ -12,5 +12,4 @@ interface Repository {
     fun getAllNote(): List<Movies>
     fun saveEntity(movies: Movies)
     fun saveNote(movies: Movies)
-    fun getPersonById(): Movies
 }

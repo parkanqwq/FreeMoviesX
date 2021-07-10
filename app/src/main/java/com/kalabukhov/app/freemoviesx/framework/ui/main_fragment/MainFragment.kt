@@ -29,7 +29,6 @@ import com.kalabukhov.app.freemoviesx.model.AppState
 import com.kalabukhov.app.freemoviesx.model.entites.Movie
 import com.kalabukhov.app.freemoviesx.model.entites.Movies
 import com.kalabukhov.app.freemoviesx.model.repository.ADULT
-import com.kalabukhov.app.freemoviesx.model.repository.ID
 import com.kalabukhov.app.freemoviesx.model.repository.QUERY
 import com.kalabukhov.app.freemoviesx.showSnackBar
 import com.kalabukhov.app.freemoviesx.showSnackBarLoading
@@ -48,9 +47,9 @@ class MainFragment : Fragment(), CoroutineScope by MainScope() {
         override fun onItemViewClick(movies: Movies) {
             activity?.supportFragmentManager?.let {
                 val bundle = Bundle()
-                bundle.putParcelable(MapsFragment.BUNDLE_EXTRA_MAP, movies)
+                bundle.putParcelable(DetailsFragment.BUNDLE_EXTRA, movies)
                 it.beginTransaction()
-                    .add(R.id.container, MapsFragment.newInstance(bundle))
+                    .add(R.id.container, DetailsFragment.newInstance(bundle))
                     .addToBackStack("")
                     .commitAllowingStateLoss()
             }
@@ -413,8 +412,7 @@ class MainFragment : Fragment(), CoroutineScope by MainScope() {
         val searchText = search.actionView as SearchView
         searchText.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-               // QUERY = query
-                ID = query.toInt()
+                QUERY = query
                 viewModel.getLiveData().observe(viewLifecycleOwner, { renderData(it) })
                 viewModel.getMoviesFilm()
                 return true

@@ -203,10 +203,10 @@ class DetailsFragment : Fragment() {
                             is AppState.Loading -> loadingLayout.visibility = View.VISIBLE
                             is AppState.Success -> {
                                 loadingLayout.visibility = View.GONE
-                                nameMovie.text = appState.moviesData[0].name.toString()
+                                nameMovie.text = appState.moviesData[0].original_title.toString()
                                 starsMovie.text = CONST_STARS + appState.moviesData[0].vote_average.toString()
                                 age.text = CONST_AGE + appState.moviesData[0].release_date.toString()
-                                var us: String? = appState.moviesData[0].place_of_birth.toString()
+                                var us: String? = appState.moviesData[0].original_language.toString()
                                 if (us.equals("en")){
                                     us = "США"
                                 }
@@ -215,7 +215,7 @@ class DetailsFragment : Fragment() {
                                 tagline.text = appState.moviesData[0].overview.toString()
                                 Picasso
                                     .get()
-                                    .load("https://image.tmdb.org/t/p/original"+appState.moviesData[0].poster_path)
+                                    .load("https://image.tmdb.org/t/p/original"+appState.moviesData[0].backdrop_path)
                                     .into(imageView)
                                 adultMovie.text = appState.moviesData[0].adult.toString()
                             }

@@ -20,8 +20,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.kalabukhov.app.freemoviesx.R
 import com.kalabukhov.app.freemoviesx.databinding.FragmentMapBinding
-import com.kalabukhov.app.freemoviesx.framework.ui.details_fragment.DetailsFragment
-import com.kalabukhov.app.freemoviesx.model.entites.Movies
 import java.io.IOException
 
 class MapsFragment : Fragment() {
@@ -74,13 +72,8 @@ class MapsFragment : Fragment() {
 
     private fun initSearchByAddress() {
         binding.buttonSearch.setOnClickListener {
-            val place_of_birth: String?
-            arguments?.getParcelable<Movies>(DetailsFragment.BUNDLE_EXTRA).let {
-                place_of_birth = it?.place_of_birth // забираем адрес из бандла
-            }
             val geoCoder = Geocoder(it.context)
-           // val searchText = binding.searchAddress.text.toString()
-            val searchText = place_of_birth.toString() //ставляем сюда адрес и жмеи искать
+            val searchText = binding.searchAddress.text.toString()
             Thread {
                 try {
                     val addresses = geoCoder.getFromLocationName(searchText, 1)
