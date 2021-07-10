@@ -18,9 +18,9 @@ class MainViewModel(private val repository: Repository)
         liveDataToObserve.value = AppState.Loading
         launch {
             val localStorageJob = async(Dispatchers.IO) {
-                repository.getMovieFromLocalStorage()
+                repository.getPersonById()
             }
-            liveDataToObserve.value = AppState.Success(localStorageJob.await())
+            liveDataToObserve.value = AppState.Success(listOf(localStorageJob.await()))
         }
     }
 

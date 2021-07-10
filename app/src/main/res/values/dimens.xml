@@ -7,4 +7,5 @@
     <dimen name="text_16_sp">16sp</dimen>
     <dimen name="imageTop">250dp</dimen>
     <integer name="Grad">1</integer>
+    <dimen name="fab_location_icon_size">45dp</dimen>
 </resources>

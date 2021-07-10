@@ -1,5 +1,6 @@
 package com.kalabukhov.app.freemoviesx.model.rest
 
+import com.kalabukhov.app.freemoviesx.model.entites.PersoneMovie
 import com.kalabukhov.app.freemoviesx.model.rest.rest_entitites.MoviesDTO
 import com.kalabukhov.app.freemoviesx.model.rest.rest_entitites.MoviesDTOArr
 import retrofit2.http.Query
@@ -25,4 +26,10 @@ interface MoviesAPI {
         @Query("include_adult") include_adult: Boolean,
         @Query("query") query: String
     ): Call<MoviesDTOArr>
+
+    @GET("3/person")
+    fun getPerson(
+        @Query("id") id: Int,
+        @Query("api_key") apiKey: String
+    ): Call<PersoneMovie>
 }

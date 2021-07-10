@@ -5,12 +5,12 @@ import com.kalabukhov.app.freemoviesx.model.database.HistoryEntity
 import com.kalabukhov.app.freemoviesx.model.database_note.NoteEntity
 import com.kalabukhov.app.freemoviesx.model.entites.Movie
 import com.kalabukhov.app.freemoviesx.model.entites.Movies
-import com.kalabukhov.app.freemoviesx.model.entites.NoteMovie
 import com.kalabukhov.app.freemoviesx.model.rest.MoviesRepo
 
 var QUERY = "Человек паук"
 var ADULT = false
 var PAGE = 1
+var ID = 287
 
 class RepositoryImpl : Repository {
     override fun getMoviesFromServer(id: Int): Movies {
@@ -21,13 +21,13 @@ class RepositoryImpl : Repository {
         ).execute().body()
         return Movies(
             id = dto?.id,
-            original_title = dto?.original_title,
+            name = dto?.original_title,
             vote_average = dto?.vote_average,
             release_date = dto?.release_date,
-            original_language = dto?.original_language,
+            place_of_birth = dto?.original_language,
             runtime = dto?.runtime,
             overview = dto?.overview,
-            backdrop_path = dto?.backdrop_path,
+            poster_path = dto?.backdrop_path,
             adult = dto?.adult
         )
     }
@@ -73,6 +73,17 @@ class RepositoryImpl : Repository {
 
     override fun saveNote(movies: Movies) {
         com.kalabukhov.app.freemoviesx.model.database_note.Database.db.noteDao().insert(convertMoviesToEntityNote(movies))
+    }
+
+    override fun getPersonById(): Movies {
+        val dto = MoviesRepo.api.getPerson(
+            ID, "a7fe7b51456e94640008bbb9e3a50dd5"
+        ).execute().body()
+        return Movies(
+            name = dto?.name,
+            place_of_birth = dto?.place_of_birth,
+            poster_path = dto?.poster_path
+        )
     }
 
     private fun convertHistoryEntityToMovies(entityList: List<HistoryEntity>): List<Movies> =

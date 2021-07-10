@@ -9,15 +9,15 @@ data class Movies(
     var noteMovie: NoteMovie = getDefaultCity3(),
     val MovieArr: MovieForArr = getDefaultCity2(),
     val id: Int? = 550,
-    val original_title: String? = "name",
+    val name: String? = "name",
     val vote_average: Double? = 9.9,
     val release_date: String? = "1999.10.12",
-    val original_language: String? = "US",
+    val place_of_birth: String? = "US",
     val runtime: Int? = 140,
     val overview: String? = "",
-    val backdrop_path: String? = "",
+    val poster_path: String? = "",
     val adult: Boolean? = false,
-    val note: String? = "note"
+    val note: String? = "note",
 ) : Parcelable
 
 fun getDefaultCity1() = Movie(580, "Форсаж", 9.9,

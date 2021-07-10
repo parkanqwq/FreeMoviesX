@@ -17,9 +17,6 @@ import com.kalabukhov.app.freemoviesx.model.rest.rest_entitites.MoviesDTO
 import com.kalabukhov.app.freemoviesx.services.DetailsService
 import com.kalabukhov.app.freemoviesx.services.LATITUDE_EXTRA
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_details.*
-import kotlinx.android.synthetic.main.fragment_details.view.*
-import kotlinx.android.synthetic.main.item_movies.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 const val DETAILS_INTENT_FILTER = "DETAILS INTENT FILTER"
@@ -206,10 +203,10 @@ class DetailsFragment : Fragment() {
                             is AppState.Loading -> loadingLayout.visibility = View.VISIBLE
                             is AppState.Success -> {
                                 loadingLayout.visibility = View.GONE
-                                nameMovie.text = appState.moviesData[0].original_title.toString()
+                                nameMovie.text = appState.moviesData[0].name.toString()
                                 starsMovie.text = CONST_STARS + appState.moviesData[0].vote_average.toString()
                                 age.text = CONST_AGE + appState.moviesData[0].release_date.toString()
-                                var us: String? = appState.moviesData[0].original_language.toString()
+                                var us: String? = appState.moviesData[0].place_of_birth.toString()
                                 if (us.equals("en")){
                                     us = "США"
                                 }
@@ -218,7 +215,7 @@ class DetailsFragment : Fragment() {
                                 tagline.text = appState.moviesData[0].overview.toString()
                                 Picasso
                                     .get()
-                                    .load("https://image.tmdb.org/t/p/original"+appState.moviesData[0].backdrop_path)
+                                    .load("https://image.tmdb.org/t/p/original"+appState.moviesData[0].poster_path)
                                     .into(imageView)
                                 adultMovie.text = appState.moviesData[0].adult.toString()
                             }
