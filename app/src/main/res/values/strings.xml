@@ -1,3 +1,44 @@
 <resources>
     <string name="app_name">FreeMoviesX</string>
+    <string name="temperature_label">Температура</string>
+    <string name="feels_like_label">Ощущается как</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="search">search</string>
+    <string name="settings">Настройки</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="textFilm">Описание: тут много описание про фильм который еще не скачен из интернета, но оно обязательно появится уже очень скоро!</string>
+    <string name="loading">Загрузка</string>
+    <string name="triller">трейлер</string>
+    <string name="_2_15">2.15</string>
+    <string name="error">ошибка</string>
+    <string name="reloading">переподключиться?</string>
+    <string name="adult">Взрослый контент</string>
+    <string name="off">off</string>
+    <string name="on">on</string>
+    <string name="history">История</string>
+    <string name="like">нравится</string>
+    <string name="content_provider">Контакты</string>
+    <string name="authorities">geekbrains.provider</string>
+    <string name="local">Локация</string>
+
+    <string name="dialog_button_close">Закрыть</string>
+    <string name="dialog_title_no_gps">Доступ к геолокации закрыт</string>
+    <string name="dialog_message_no_gps">Разрешите доступ к геолокации, если хотите узнать погоду текущего места</string>
+    <string name="dialog_title_gps_turned_off">GPS отключён</string>
+    <string name="dialog_message_last_location_unknown">Местонахождение неизвестно. Включите GPS, если хотите получить погоду по текущему адресу</string>
+    <string name="dialog_message_last_known_location">Показана последняя известная локация. Включите GPS, если хотите обновить местонахождение</string>
+    <string name="dialog_rationale_title">Доступ к геолокации</string>
+    <string name="dialog_rationale_meaasge">Объяснение</string>
+    <string name="dialog_rationale_give_access">Предоставить доступ</string>
+    <string name="dialog_rationale_decline">Не надо</string>
+    <string name="dialog_address_title">Ваш адрес</string>
+    <string name="dialog_address_get_weather">Узнать погоду</string>
+
+    <string name="maps_api_key">AIzaSyBGJV_Ml5Z8g20-e4C9s2c2gWcDxRii5Io</string>
+
+    <string name="default_address">Red Square, 1, Moscow</string>
+    <string name="button_search_map">Search</string>
+    <string name="marker_start">Start</string>
 </resources>

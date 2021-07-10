@@ -1,8 +1,13 @@
 package com.kalabukhov.app.freemoviesx
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.kalabukhov.app.freemoviesx.ui.main.MainFragment
+import androidx.appcompat.app.AppCompatActivity
+import com.kalabukhov.app.freemoviesx.framework.ui.main_fragment.MainFragment
+
+const val CONST_COUNTRY = "Страна: "
+const val CONST_STARS = "Рейтинг: "
+const val CONST_AGE = "Год: "
+const val CONST_TIME_MOVIE = "Продолжительность: "
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, MainFragment.newInstance())
-                .commitNow()
+                .commit()
         }
     }
 }
